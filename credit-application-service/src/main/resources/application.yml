@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: credit-application-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/coopcredit_db
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update # Changed from 'validate' to 'update' since Flyway is removed
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false # Recommended for performance
+  # Removed flyway configuration:
+  # flyway:
+  #   enabled: true
+  #   locations: classpath:db/migration
+
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970 # Replace with a strong, randomly generated key in production
+      expiration: 86400000 # 24 hours in milliseconds
+
+risk-central:
+  service:
+    url: http://localhost:8081 # Default URL for risk-central-mock-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+
+logging:
+  level:
+    root: INFO
+    com.coopcredit: DEBUG # Adjust as needed
+  pattern:
+    level: "%5p [${spring.application.name},%X{traceId:-},%X{spanId:-}]" # Structured logging with traceId and spanId
